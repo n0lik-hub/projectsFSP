@@ -348,6 +348,555 @@ pause
 
 ---
 
+## 🐧 Руководство по запуску в Linux
+
+Данный раздел содержит пошаговые инструкции для запуска приложения «VIP Бонус-Арена» на операционной системе Linux (Ubuntu/Debian, CentOS/RHEL, Fedora).
+
+### Шаг 1: Установка необходимых компонентов
+
+#### 1.1. Установка Java Development Kit (JDK) 17
+
+**Для Ubuntu/Debian:**
+
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+```
+
+**Для CentOS/RHEL:**
+
+```bash
+sudo yum install java-17-openjdk-devel -y
+```
+
+**Для Fedora:**
+
+```bash
+sudo dnf install java-17-openjdk-devel -y
+```
+
+**Проверка установки:**
+
+```bash
+java -version
+javac -version
+```
+
+Должна отобразиться версия 17 или выше.
+
+**Настройка JAVA_HOME (опционально):**
+
+```bash
+# Найдите путь установки Java
+update-alternatives --config java
+
+# Добавьте в ~/.bashrc или ~/.profile
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Примените изменения
+source ~/.bashrc
+```
+
+#### 1.2. Установка Apache Maven
+
+**Для Ubuntu/Debian:**
+
+```bash
+sudo apt install maven -y
+```
+
+**Для CentOS/RHEL:**
+
+```bash
+sudo yum install maven -y
+```
+
+**Для Fedora:**
+
+```bash
+sudo dnf install maven -y
+```
+
+**Альтернативная ручная установка (для всех дистрибутивов):**
+
+```bash
+# Скачайте последнюю версию Maven
+cd /tmp
+wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+
+# Распакуйте
+sudo tar -xzf apache-maven-3.9.6-bin.tar.gz -C /opt/
+
+# Создайте символическую ссылку
+sudo ln -s /opt/apache-maven-3.9.6 /opt/maven
+
+# Добавьте в ~/.bashrc
+export M2_HOME=/opt/maven
+export M2=$M2_HOME/bin
+export PATH=$M2:$PATH
+
+# Примените изменения
+source ~/.bashrc
+```
+
+**Проверка установки:**
+
+```bash
+mvn -version
+```
+
+#### 1.3. Установка Node.js и npm
+
+**Рекомендуемый способ через NVM (Node Version Manager):**
+
+```bash
+# Установите NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Активируйте NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Установите Node.js LTS версии
+nvm install --lts
+
+# Проверьте версии
+node -v
+npm -v
+```
+
+**Альтернативный способ для Ubuntu/Debian:**
+
+```bash
+# Добавьте репозиторий NodeSource
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+
+# Установите Node.js
+sudo apt install -y nodejs
+
+# Проверьте версии
+node -v
+npm -v
+```
+
+**Альтернативный способ для Fedora:**
+
+```bash
+sudo dnf install nodejs npm -y
+```
+
+### Шаг 2: Подготовка проекта
+
+#### 2.1. Клонирование репозитория
+
+```bash
+cd ~
+git clone <URL_репозитория>
+cd VIP-Bonus-Arena
+```
+
+Или распакуйте ZIP-архив:
+
+```bash
+unzip vip-bonus-arena.zip
+cd VIP-Bonus-Arena
+```
+
+#### 2.2. Проверка структуры проекта
+
+```bash
+ls -la
+# Должны быть видны директории backend/ и frontend/
+
+ls backend/
+# Должен быть виден pom.xml
+
+ls frontend/
+# Должны быть видны package.json и src/
+```
+
+### Шаг 3: Запуск бэкенда (Spring Boot)
+
+1. Откройте терминал
+2. Перейдите в директорию бэкенда:
+   ```bash
+   cd ~/VIP-Bonus-Arena/backend
+   ```
+
+3. Очистите и соберите проект (первый запуск):
+   ```bash
+   mvn clean install -DskipTests
+   ```
+   
+   ⏱️ Первая сборка может занять 5-10 минут
+
+4. Запустите приложение:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+   **Альтернативный способ** (если есть Maven wrapper):
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+5. Дождитесь сообщения об успешном запуске:
+   ```
+   Started BonusArenaApplication in X.XXX seconds
+   Tomcat started on port(s): 8080 (http)
+   ```
+
+6. **Важно:** Не закрывайте этот терминал — бэкенд должен работать постоянно
+   
+7. **Совет:** Для работы в фоне используйте `nohup` или `tmux`:
+   ```bash
+   # С использованием nohup
+   nohup mvn spring-boot:run > backend.log 2>&1 &
+   
+   # С использованием tmux (рекомендуется)
+   tmux new -s backend
+   mvn spring-boot:run
+   # Нажмите Ctrl+B, затем D для отключения от сессии
+   ```
+
+8. Проверьте доступность API:
+   ```bash
+   curl http://localhost:8080/api/users
+   ```
+
+### Шаг 4: Запуск фронтенда (Vue.js)
+
+1. Откройте **новый** терминал (не закрывая бэкенд)
+2. Перейдите в директорию фронтенда:
+   ```bash
+   cd ~/VIP-Bonus-Arena/frontend
+   ```
+
+3. Установите зависимости (только при первом запуске):
+   ```bash
+   npm install
+   ```
+   
+   ⏱️ Процесс может занять 2-5 минут
+
+4. Запустите сервер разработки:
+   ```bash
+   npm run dev
+   ```
+
+5. Дождитесь сообщения:
+   ```
+   VITE ready in XXX ms
+   ➜  Local:   http://localhost:3000/
+   ➜  Network: use --host to expose
+   ```
+
+6. Откройте браузер и перейдите по адресу: http://localhost:3000
+
+**Запуск в фоновом режиме:**
+
+```bash
+# С использованием nohup
+nohup npm run dev > frontend.log 2>&1 &
+
+# Или с использованием tmux
+tmux new -s frontend
+npm run dev
+# Ctrl+B, затем D
+```
+
+### Шаг 5: Проверка работоспособности
+
+1. **Проверка бэкенда:**
+   ```bash
+   curl http://localhost:8080/api/configurations
+   ```
+   Должен вернуться JSON со списком конфигураций
+
+2. **Проверка фронтенда:**
+   - Откройте http://localhost:3000 в браузере
+   - Выберите пользователя (player1, player2, admin)
+   - Проверьте баланс
+
+3. **Тестовый сценарий:**
+   - Войдите как `admin`
+   - Создайте комнату
+   - В другой вкладке войдите как `player1`
+   - Присоединитесь к комнате
+   - Запустите раунд как администратор
+
+### Решение распространённых проблем
+
+#### Проблема 1: Команда `java` не найдена
+
+**Решение:**
+```bash
+# Проверьте установку
+which java
+
+# Если не найдена, установите JDK
+sudo apt install openjdk-17-jdk -y  # Ubuntu/Debian
+sudo yum install java-17-openjdk-devel -y  # CentOS/RHEL
+
+# Проверьте JAVA_HOME
+echo $JAVA_HOME
+
+# При необходимости настройте
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+```
+
+#### Проблема 2: Ошибка Maven «Permission denied»
+
+**Решение:**
+```bash
+# Проверьте права на директорию Maven
+ls -la /opt/maven/bin/
+
+# Исправьте права при необходимости
+sudo chmod +x /opt/maven/bin/mvn
+```
+
+#### Проблема 3: npm install завершается ошибкой EACCES
+
+**Решение:**
+```bash
+# Очистите кэш npm
+npm cache clean --force
+
+# Удалите node_modules и package-lock.json
+rm -rf node_modules package-lock.json
+
+# Попробуйте снова
+npm install
+
+# Если проблема с правами, измените владельца глобальной директории npm
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+#### Проблема 4: Порт 8080 или 3000 уже занят
+
+**Решение:**
+```bash
+# Найдите процесс, использующий порт
+sudo lsof -i :8080
+# или
+sudo netstat -tulpn | grep :8080
+
+# Завершите процесс
+sudo kill -9 <PID>
+
+# Или измените порт в конфигурации
+# Бэкенд: application.properties
+echo "server.port=8081" >> src/main/resources/application.properties
+
+# Фронтенд: vite.config.js или .env
+echo "VITE_PORT=3001" >> .env
+```
+
+#### Проблема 5: Ошибка CORS в браузере
+
+**Решение:**
+- Убедитесь, что бэкенд запущен
+- Проверьте конфигуратор CORS в `WebConfig.java`
+- Попробуйте режим инкогнито в браузере
+
+#### Проблема 6: Недостаточно памяти для сборки
+
+**Решение:**
+```bash
+# Увеличьте память для Maven
+export MAVEN_OPTS="-Xmx2048m"
+mvn clean install -DskipTests
+
+# Или уменьшите параллелизм
+mvn clean install -DskipTests -T 1
+```
+
+### Дополнительные команды для Linux
+
+#### Сборка production-версии фронтенда
+
+```bash
+cd ~/VIP-Bonus-Arena/frontend
+npm run build
+```
+
+Файлы появятся в `dist/`
+
+#### Создание JAR-файла бэкенда
+
+```bash
+cd ~/VIP-Bonus-Arena/backend
+mvn clean package -DskipTests
+```
+
+JAR-файл: `target/bonus-arena-0.0.1-SNAPSHOT.jar`
+
+#### Запуск бэкенда из JAR
+
+```bash
+java -jar target/bonus-arena-0.0.1-SNAPSHOT.jar
+```
+
+#### Создание systemd сервисов (для продакшена)
+
+**Сервис для бэкенда** `/etc/systemd/system/bonus-arena-backend.service`:
+
+```ini
+[Unit]
+Description=VIP Bonus Arena Backend
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/vip-bonus-arena/backend
+ExecStart=/usr/bin/java -jar bonus-arena-0.0.1-SNAPSHOT.jar
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Сервис для фронтенда** `/etc/systemd/system/bonus-arena-frontend.service`:
+
+```ini
+[Unit]
+Description=VIP Bonus Arena Frontend
+After=network.target bonus-arena-backend.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/vip-bonus-arena/frontend
+ExecStart=/usr/bin/npm run dev
+Environment=NODE_ENV=production
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Активация сервисов:**
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable bonus-arena-backend
+sudo systemctl enable bonus-arena-frontend
+sudo systemctl start bonus-arena-backend
+sudo systemctl start bonus-arena-frontend
+
+# Проверка статуса
+sudo systemctl status bonus-arena-backend
+sudo systemctl status bonus-arena-frontend
+```
+
+#### Скрипт автоматического запуска
+
+Создайте файл `start-all.sh` в корне проекта:
+
+```bash
+#!/bin/bash
+
+echo "🚀 Запуск VIP Бонус-Арена..."
+
+# Запуск бэкенда в отдельной сессии tmux
+tmux new -d -s backend "cd $(pwd)/backend && mvn spring-boot:run"
+echo "✅ Бэкенд запущен в сессии tmux 'backend'"
+
+# Ожидание запуска бэкенда
+sleep 10
+
+# Запуск фронтенда в отдельной сессии tmux
+tmux new -d -s frontend "cd $(pwd)/frontend && npm run dev"
+echo "✅ Фронтенд запущен в сессии tmux 'frontend'"
+
+echo ""
+echo "📍 Бэкенд: http://localhost:8080"
+echo "📍 Фронтенд: http://localhost:3000"
+echo ""
+echo "Для подключения к сессиям:"
+echo "  tmux attach -t backend"
+echo "  tmux attach -t frontend"
+echo ""
+echo "Для остановки:"
+echo "  tmux kill-session -t backend"
+echo "  tmux kill-session -t frontend"
+```
+
+**Сделайте скрипт исполняемым и запустите:**
+
+```bash
+chmod +x start-all.sh
+./start-all.sh
+```
+
+#### Скрипт остановки
+
+Создайте файл `stop-all.sh`:
+
+```bash
+#!/bin/bash
+
+echo "🛑 Остановка VIP Бонус-Арена..."
+
+# Завершение процессов по портам
+sudo fuser -k 8080/tcp 2>/dev/null && echo "✅ Бэкенд остановлен"
+sudo fuser -k 3000/tcp 2>/dev/null && echo "✅ Фронтенд остановлен"
+
+# Или завершение сессий tmux
+tmux kill-session -t backend 2>/dev/null
+tmux kill-session -t frontend 2>/dev/null
+
+echo "✅ Все сервисы остановлены"
+```
+
+---
+
+## 🐳 Запуск через Docker (универсальный способ)
+
+Для всех операционных систем (Windows, Linux, macOS) доступен запуск через Docker.
+
+### Требования
+
+- Docker Desktop (Windows/macOS) или Docker Engine (Linux)
+- Docker Compose
+
+### Быстрый старт
+
+```bash
+# Перейдите в корень проекта
+cd /workspace
+
+# Запустите все сервисы
+docker-compose up -d
+
+# Проверьте статус
+docker-compose ps
+
+# Просмотр логов
+docker-compose logs -f
+```
+
+### Остановка
+
+```bash
+docker-compose down
+```
+
+### Структура docker-compose.yml
+
+Файл `docker-compose.yml` должен содержать:
+- Сервис базы данных (PostgreSQL/H2)
+- Сервис бэкенда (Spring Boot)
+- Сервис фронтенда (Vue.js + Nginx)
+
+---
+
 ## Демонстрационные пользователи
 
 При первом запуске создаются тестовые пользователи:
