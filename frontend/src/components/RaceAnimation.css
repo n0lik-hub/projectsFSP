@@ -1,0 +1,166 @@
+.race-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+.race-overlay {
+  background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 100%);
+  border-radius: 24px;
+  padding: 2rem;
+  min-width: 800px;
+  max-width: 90vw;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 60px rgba(0, 212, 255, 0.2);
+  cursor: default;
+}
+
+.race-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.race-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.racer-lane {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.racer-lane:last-child {
+  margin-bottom: 0;
+}
+
+.racer-info {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.racer-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.racer-name.bot {
+  color: #888;
+}
+
+.racer-name.winner {
+  color: #ffd700;
+  font-size: 1.3rem;
+}
+
+.boost-badge {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.winner-badge {
+  margin-left: 0.5rem;
+}
+
+.racer-weight {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.lane-track {
+  flex: 1;
+  position: relative;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.finish-line {
+  position: absolute;
+  right: 50px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    0deg,
+    #fff 0px,
+    #fff 10px,
+    #000 10px,
+    #000 20px
+  );
+}
+
+.spaceship {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  transition: left 0.1s ease-out;
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+}
+
+.spaceship.boost-active {
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+}
+
+.race-status {
+  text-align: center;
+  padding: 1rem;
+}
+
+.countdown {
+  font-size: 1.2rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+  transition: width 0.1s;
+}
+
+.winner-announcement h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.winner-name {
+  font-size: 1.5rem;
+  color: #00d4ff;
+  margin-bottom: 0.5rem;
+}
+
+.bot-winner-note {
+  color: #888;
+  font-style: italic;
+}
