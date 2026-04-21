@@ -22,12 +22,13 @@ MVP веб-приложения быстрых бонусных игр для VI
 │   └── src/main/resources/
 │       └── application.properties
 │
-└── frontend/               # Vue.js фронтенд
+└── frontend/               # React фронтенд (Vite)
     ├── src/
-    │   ├── components/     # Vue компоненты
+    │   ├── components/     # React компоненты
     │   ├── pages/          # Страницы приложения
-    │   ├── store/          # Pinia store
-    │   └── App.vue
+    │   ├── store/          # Zustand store
+    │   ├── hooks/          # Custom React hooks
+    │   └── App.jsx
     ├── package.json
     └── vite.config.js
 ```
@@ -178,7 +179,7 @@ VIP-Bonus-Arena/
 
 7. Проверьте доступность API, открыв в браузере: http://localhost:8080/api/users
 
-### Шаг 4: Запуск фронтенда (Vue.js)
+### Шаг 4: Запуск фронтенда (React)
 
 1. Откройте **новое** окно командной строки или PowerShell (не закрывая бэкенд)
 2. Перейдите в директорию фронтенда:
@@ -565,7 +566,7 @@ ls frontend/
    curl http://localhost:8080/api/users
    ```
 
-### Шаг 4: Запуск фронтенда (Vue.js)
+### Шаг 4: Запуск фронтенда (React)
 
 1. Откройте **новый** терминал (не закрывая бэкенд)
 2. Перейдите в директорию фронтенда:
@@ -893,7 +894,7 @@ docker-compose down
 Файл `docker-compose.yml` должен содержать:
 - Сервис базы данных (PostgreSQL/H2)
 - Сервис бэкенда (Spring Boot)
-- Сервис фронтенда (Vue.js + Nginx)
+- Сервис фронтенда (React + Nginx)
 
 ---
 
@@ -995,10 +996,12 @@ docker-compose down
 - WebSocket (STOMP)
 
 ### Фронтенд
-- Vue 3
-- Pinia (state management)
+- React 18
+- Zustand (state management)
 - Axios (HTTP client)
 - Vite (build tool)
+- React Router DOM (routing)
+- Custom hooks для работы с WebSocket
 
 ## Архитектурные решения
 
